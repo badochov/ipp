@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 static void sortuj(int *tablica, size_t n) {
   size_t i, j;
@@ -10,15 +11,20 @@ static void sortuj(int *tablica, size_t n) {
         t = tablica[i], tablica[i] = tablica[j], tablica[j] = t;
 }
 
-#define ROZMIAR_TABLICY 1000
+size_t ROZMIAR_TABLICY = 10;
 
 int main() {
   size_t i, n;
-  int tablica[ROZMIAR_TABLICY];
+  int *tablica = malloc(ROZMIAR_TABLICY * sizeof(int));
 
   n = 0;
-  while (scanf("%d", &tablica[n]) == 1)
+  while (scanf("%d", &tablica[n]) == 1){
     ++n;
+    if(n == ROZMIAR_TABLICY){
+        ROZMIAR_TABLICY*=2;
+        tablica = realloc(tablica, ROZMIAR_TABLICY * sizeof(int));
+    }
+  }
 
   sortuj(tablica, n);
 
