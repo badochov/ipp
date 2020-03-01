@@ -1,4 +1,0 @@
-/home/badochov/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6494.38/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/badochov/Desktop/IPP/lasy
--- Configuring done
--- Generating done
--- Build files have been written to: /home/badochov/Desktop/IPP/lasy/cmake-build-debug
