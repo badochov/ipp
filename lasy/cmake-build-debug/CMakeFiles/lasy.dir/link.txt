@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/lasy.dir/main.c.o CMakeFiles/lasy.dir/BST.c.o CMakeFiles/lasy.dir/trees.c.o  -o lasy 

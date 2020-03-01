@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/badochov/Desktop/IPP/lasy/BST.c
+BST.h
+/home/badochov/Desktop/IPP/lasy/BST.h
+
+/home/badochov/Desktop/IPP/lasy/BST.h
+stdbool.h
+-
+
+/home/badochov/Desktop/IPP/lasy/main.c
+stdio.h
+-
+
