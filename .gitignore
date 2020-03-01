@@ -1,2 +1,4 @@
 *.out
 sort
+/**/.idea
+/**/cmake-build-debug
