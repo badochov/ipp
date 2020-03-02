@@ -3,4 +3,4 @@ project(lasy C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(lasy main.c BST.c BST.h forests.c forests.h)
+add_executable(lasy main.c BST.c BST.h forests.c forests.h input.c input.h)

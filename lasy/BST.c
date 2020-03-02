@@ -114,24 +114,23 @@ BST *removeChild(BST *node, char *val, char *child) {
 
 bool anyInTree(BST *node, char *s, bool (*fun)(BST *, char *)) {
   if (node == NULL) {
-    return true;
+    return false;
   }
   return fun(node->left, s) || fun(node, s) || fun(node->right, s);
 }
 
 bool anyInTree2(BST *node, char *s, char *s2, bool (*fun)(BST *, char *, char *)) {
   if (node == NULL) {
-    return true;
+    return false;
   }
   return fun(node->left, s, s2) || fun(node, s, s2) || fun(node->right, s, s2);
 }
 
-// funckja pomocnicza do funckj print
-bool printHelper(BST *node, char *s) {
-  printf("%s\n", node->value);
-  return true;
-}
-
 void printTree(BST *node) {
-  anyInTree(node, "", printHelper);
+  if (node == NULL) {
+    return;
+  }
+  printTree(node->left);
+  fprintf(stdout, "%s\n",node->value);
+  printTree(node->right);
 }

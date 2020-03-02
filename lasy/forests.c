@@ -4,6 +4,7 @@
 
 #include <stddef.h>
 #include <string.h>
+#include <stdio.h>
 #include "forests.h"
 
 // szuka lasu o danej nazwie, jeżeli go nie ma zwraca NULL
@@ -48,34 +49,23 @@ BST *removeAnimal(BST *node, char *forest, char *tree, char *animal) {
   return removeNode(tr, animal);
 }
 
-// funckja pomocniczna (synonim do checkForest)
-bool checkHelperDepth1(BST *node, char *name) {
-  if (name == NULL) {
-    return false;
-  }
-  if (strcmp(name, "*") == 0) {
-    return node == NULL;
-  }
-  return getForest(node, name) == NULL;
-}
 
 bool checkForest(BST *node, char *forest) {
-  return checkHelperDepth1(node, forest);
+  printf("siema");
+  if (forest == NULL) {
+    return false;
+  }
+  return getForest(node, forest) == NULL;
 }
 
-// funckja pomocniczna (synonim fo checkTree)
-bool checkHelperDepth2(BST *node, char *forest, char *tree) {
+bool checkTree(BST *node, char *forest, char *tree) {
   if (forest == NULL || tree == NULL) {
     return false;
   }
   if (strcmp(forest, "*") == 0) {
-    return anyInTree(node, tree, checkHelperDepth1);
+    return anyInTree(node, tree, checkForest);
   }
-  return checkHelperDepth1(getForest(node, forest), tree);
-};
-
-bool checkTree(BST *node, char *forest, char *tree) {
-  return checkHelperDepth2(node, forest, tree);
+  return checkForest(getForest(node, forest), tree);
 }
 
 // funckja pomocnicza przy szukaniu zwierzęcia, przeszukuje cały las w poszukinaiu zwierzęcia na danym drzewie
@@ -99,7 +89,7 @@ bool checkAnimal(BST *node, char *forest, char *tree, char *animal) {
   if (f == NULL) {
     return false;
   }
-  return checkHelperDepth2(f->children, tree, animal);
+  return checkTree(f->children, tree, animal);
 }
 
 void printForests(BST *node) {
@@ -121,5 +111,3 @@ void printAnimals(BST *node, char *forest, char *tree) {
   }
   printTree(tr->children);
 }
-
-//TODO przy gwiazdach walidacja długosci
