@@ -13,13 +13,13 @@
  */
 
 // tworzy nowy las
-BST *addForest(BST *node, t name);
+BST *addForest(BST *node, char *name);
 
 // dodaje nowe drzewe w danym lesie, jeśli las nie istenieje tworzy go
-BST *addTree(BST *node, t forest, t tree);
+BST *addTree(BST *node, char *forest, char *tree);
 
 //dodaje nowe zwierzę na danym drzewie w danym lesie, jeżeli nie ma drzewa lub lasu tworzy je
-BST *addAnimal(BST *node, t forest, t tree, t animal);
+BST *addAnimal(BST *node, char *forest, char *tree, char *animal);
 
 
 // USUWANIE
@@ -28,13 +28,13 @@ BST *addAnimal(BST *node, t forest, t tree, t animal);
  */
 
 // usuwa las
-BST *removeForest(BST *node, t forest);
+BST *removeForest(BST *node, char *forest);
 
 // usuwa drzewo w danym lesie
-BST *removeTree(BST *node, t forest, t tree);
+BST *removeTree(BST *node, char *forest, char *tree);
 
 // usuwa zwierze na danym drzewie w danym lesie
-BST *removeAnimal(BST *node, t forest, t tree, t animal);
+BST *removeAnimal(BST *node, char *forest, char *tree, char *animal);
 
 
 // SPRAWDZANIE ISTNIENIA
@@ -44,13 +44,13 @@ BST *removeAnimal(BST *node, t forest, t tree, t animal);
 
 
 // sprawdza czy istenieje las
-bool checkForest(BST *node, t forest);
+bool checkForest(BST *node, char *forest);
 
 // sprawdza czy istenieje dane drzewo w danym lesie
-bool checkTree(BST *node, t forest, t tree);
+bool checkTree(BST *node, char *forest, char *tree);
 
 // sprawdza czy istnieje dane zwierzę na danym drzewie w danym lesie
-bool checkAnimal(BST *node, t forest, t tree, t animal);
+bool checkAnimal(BST *node, char *forest, char *tree, char *animal);
 
 
 // WYPISYWANIE
@@ -63,9 +63,9 @@ bool checkAnimal(BST *node, t forest, t tree, t animal);
 void printForests(BST *node);
 
 // wypisuje wszystkie drzewa w danym lesie
-void printTrees(BST *node, t forest);
+void printTrees(BST *node, char *forest);
 
 // wypisuje wszystkie zwierzęta na danym drzewie w danym lesie
-void printAnimals(BST *node, t forest, t tree);
+void printAnimals(BST *node, char *forest, char *tree);
 
 #endif //LASY__FORESTS_H_

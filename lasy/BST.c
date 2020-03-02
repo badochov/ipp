@@ -1,40 +1,49 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "BST.h"
 //
 // Created by badochov on 01.03.2020.
 //
 
+BST *init(char *value) {
+  BST *node = malloc(sizeof(BST));
+  node->value = value;
+  node->right = NULL;
+  node->left = NULL;
+  node->children = NULL;
+  return node;
+}
 
-BST *addNode(BST *node, t val) {
+BST *addNode(BST *node, char *val) {
   if (node == NULL) {
-    BST *node;
-    node->value = val;
-    return node;
+    return init(val);
   }
-  if (val > node->value) {
+  int cmp = strcmp(val, node->value);
+  if (cmp > 0) {
     node->right = addNode(node->right, val);
-  } else if (val < node->value) {
+  } else if (cmp < 0) {
     node->left = addNode(node->left, val);
   }
   return node;
 }
 
-BST *getNode(BST *node, t val) {
+BST *getNode(BST *node, char *val) {
   if (node == NULL) {
     return NULL;
   }
-  if (val == node->value) {
+  int cmp = strcmp(val, node->value);
+  if (cmp == 0) {
     return node;
-  } else if (val < node->value) {
+  } else if (cmp < 0) {
     return getNode(node->left, val);
   } else {
     return getNode(node->right, val);
   }
 }
 
-bool checkNode(BST *node, t val) {
+bool checkNode(BST *node, char *val) {
   return getNode(node, val) == NULL;
 }
 
@@ -64,7 +73,7 @@ BST *deleteNode(BST *node) {
   return node;
 }
 
-BST *removeNode(BST *node, t val) {
+BST *removeNode(BST *node, char *val) {
   BST *n = getNode(node, val);
   if (n == NULL) {
     return NULL;
@@ -74,7 +83,7 @@ BST *removeNode(BST *node, t val) {
   return node;
 }
 
-BST *addChild(BST *node, t val, t child) {
+BST *addChild(BST *node, char *val, char *child) {
   BST *n = getNode(node, val);
   if (n == NULL) {
     return NULL;
@@ -83,7 +92,7 @@ BST *addChild(BST *node, t val, t child) {
   return node;
 }
 
-BST *getChild(BST *node, t val, t child) {
+BST *getChild(BST *node, char *val, char *child) {
   BST *n = getNode(node, val);
   if (n == NULL) {
     return NULL;
@@ -91,11 +100,11 @@ BST *getChild(BST *node, t val, t child) {
   return getNode(node->children, child);
 }
 
-bool checkChild(BST *node, t val, t child) {
+bool checkChild(BST *node, char *val, char *child) {
   return getChild(node, val, child) == NULL;
 }
 
-BST *removeChild(BST *node, t val, t child) {
+BST *removeChild(BST *node, char *val, char *child) {
   BST *n = getNode(node, val);
   if (n == NULL) {
     return NULL;
@@ -103,21 +112,22 @@ BST *removeChild(BST *node, t val, t child) {
   return removeNode(node->children, child);
 }
 
-bool anyInTree(BST *node, t s, bool (*fun)(BST *, t)) {
+bool anyInTree(BST *node, char *s, bool (*fun)(BST *, char *)) {
   if (node == NULL) {
     return true;
   }
   return fun(node->left, s) || fun(node, s) || fun(node->right, s);
 }
 
-bool anyInTree2(BST *node, t s, t s2, bool (*fun)(BST *, t, t)) {
+bool anyInTree2(BST *node, char *s, char *s2, bool (*fun)(BST *, char *, char *)) {
   if (node == NULL) {
     return true;
   }
   return fun(node->left, s, s2) || fun(node, s, s2) || fun(node->right, s, s2);
 }
 
-bool printHelper(BST *node, t s) {
+// funckja pomocnicza do funckj print
+bool printHelper(BST *node, char *s) {
   printf("%s\n", node->value);
   return true;
 }

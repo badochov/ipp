@@ -3,16 +3,20 @@
 //
 
 #include <stddef.h>
+#include <string.h>
 #include "forests.h"
 
+// szuka lasu o danej nazwie, jeżeli go nie ma zwraca NULL
 BST *getForest(BST *node, char *forest) {
   return getNode(node, forest);
 }
 
+// szuka lasu o drzewa nazwie w danym lesie, jeżeli las lub drzewo nie występuje zwraca NULL
 BST *getTree(BST *node, char *forest, char *tree) {
   return getChild(node, forest, tree);
 }
 
+// szuka podanego zwierzęcia w danym lesie na danym drzewie, jeżeli coś z tej trójki nie występuje zwraca NULL
 BST *getAnimal(BST *node, char *forest, char *tree, char *animal) {
   BST *tr = getTree(node, forest, tree);
   return getNode(tr, animal);
@@ -44,11 +48,12 @@ BST *removeAnimal(BST *node, char *forest, char *tree, char *animal) {
   return removeNode(tr, animal);
 }
 
-bool checkHelperDepth1(BST *node, t name) {
+// funckja pomocniczna (synonim do checkForest)
+bool checkHelperDepth1(BST *node, char *name) {
   if (name == NULL) {
     return false;
   }
-  if (name[0] == "*") {
+  if (strcmp(name, "*") == 0) {
     return node == NULL;
   }
   return getForest(node, name) == NULL;
@@ -58,20 +63,22 @@ bool checkForest(BST *node, char *forest) {
   return checkHelperDepth1(node, forest);
 }
 
+// funckja pomocniczna (synonim fo checkTree)
 bool checkHelperDepth2(BST *node, char *forest, char *tree) {
   if (forest == NULL || tree == NULL) {
     return false;
   }
-  if (forest[0] == "*") {
+  if (strcmp(forest, "*") == 0) {
     return anyInTree(node, tree, checkHelperDepth1);
   }
   return checkHelperDepth1(getForest(node, forest), tree);
 };
 
 bool checkTree(BST *node, char *forest, char *tree) {
-  checkHelperDepth2(node, forest, tree);
+  return checkHelperDepth2(node, forest, tree);
 }
 
+// funckja pomocnicza przy szukaniu zwierzęcia, przeszukuje cały las w poszukinaiu zwierzęcia na danym drzewie
 bool checkAnimalHelper(BST *node, char *tree, char *animal) {
   if (node == NULL) {
     return false;
@@ -85,7 +92,7 @@ bool checkAnimal(BST *node, char *forest, char *tree, char *animal) {
   if (forest == NULL || tree == NULL || animal == NULL) {
     return false;
   }
-  if (forest[0] == "*") {
+  if (strcmp(forest, "*") == 0) {
     return anyInTree2(node, forest, animal, checkAnimalHelper);
   }
   BST *f = getForest(node, forest);
@@ -114,3 +121,5 @@ void printAnimals(BST *node, char *forest, char *tree) {
   }
   printTree(tr->children);
 }
+
+//TODO przy gwiazdach walidacja długosci
