@@ -1,34 +1,13 @@
-#CFLAGS = -O -Wall -Wextra -O2
-#
-#OBJ =\
-#    pierwszy.o \
-#    drugi.o \
-#    trzeci.o \
-#    czwarty.o
-#
-#all: main
-#
-#clean:
-#       rm -f *.o test
-#.c.o:
-#       $(CC) -c $(INCLUDES) $(CFLAGS) $<
-#
-#main: $(OBJ)
-#       $(CC) $(OBJ) -o test
-
 CC = gcc
+CFLAGS = -Wall -Wextra -O2 -std=c11
+DEPS = forests.h BST.h input.h
+OBJ = forests.o main.o input.o BST.o
 
-all: main.c BST.c forests.c input.c
-	$(CC) BST.c forests.c main.c input.c -o lasy -I . -Wall -Wextra -O2 -g
+%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
 
-#main.o: main.c
-#	$(CC) main.c -c -o main.o
-#
-#BST.o: BST.c BST.h
-#	$(CC) BST.c -c -o BST.o
-#
-#forests.o: forests.c forests.h
-#	$(CC) forests.c -c -o forests.o
+all: $(OBJ)
+	$(CC) -o forests $^ $(CFLAGS)
 
 clean:
-	rm -f *.o lasy
+	rm -f *.o forests

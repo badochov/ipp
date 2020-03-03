@@ -23,49 +23,46 @@ BST *getAnimal(BST *node, char *forest, char *tree, char *animal) {
   return getNode(tr, animal);
 }
 
-BST *addForest(BST *node, char *name) {
+BST *addForest(BST **node, char *name) {
   return addNode(node, name);
 }
 
-BST *addTree(BST *node, char *forest, char *tree) {
+BST *addTree(BST **node, char *forest, char *tree) {
   return addChild(node, forest, tree);
 }
 
-BST *addAnimal(BST *node, char *forest, char *tree, char *animal) {
-  BST *tr = getTree(node, forest, tree);
-  return addNode(tr, animal);
+BST *addAnimal(BST **node, char *forest, char *tree, char *animal) {
+  addTree(node, forest, tree);
+  BST *f = getForest(*node, forest);
+  addChild(&(f->children), tree, animal);
+  return *node;
 }
 
-BST *removeForest(BST *node, char *forest) {
+BST *removeForest(BST **node, char *forest) {
   return removeNode(node, forest);
 }
 
-BST *removeTree(BST *node, char *forest, char *tree) {
+BST *removeTree(BST **node, char *forest, char *tree) {
   return removeChild(node, forest, tree);
 }
 
-BST *removeAnimal(BST *node, char *forest, char *tree, char *animal) {
-  BST *tr = getTree(node, forest, tree);
-  return removeNode(tr, animal);
+BST *removeAnimal(BST **node, char *forest, char *tree, char *animal) {
+  BST *tr = getTree(*node, forest, tree);
+  return removeChild(&tr, tree, animal);
 }
 
-
 bool checkForest(BST *node, char *forest) {
-  printf("siema");
-  if (forest == NULL) {
-    return false;
-  }
-  return getForest(node, forest) == NULL;
+  return checkNode(node, forest);
 }
 
 bool checkTree(BST *node, char *forest, char *tree) {
-  if (forest == NULL || tree == NULL) {
-    return false;
-  }
   if (strcmp(forest, "*") == 0) {
-    return anyInTree(node, tree, checkForest);
+    return node != NULL
+        && (checkTree(node->left, forest, tree)
+            || checkNode(node->children, tree)
+            || checkTree(node->right, forest, tree));
   }
-  return checkForest(getForest(node, forest), tree);
+  return checkChild(node, forest, tree);
 }
 
 // funckja pomocnicza przy szukaniu zwierzęcia, przeszukuje cały las w poszukinaiu zwierzęcia na danym drzewie
@@ -79,11 +76,11 @@ bool checkAnimalHelper(BST *node, char *tree, char *animal) {
 }
 
 bool checkAnimal(BST *node, char *forest, char *tree, char *animal) {
-  if (forest == NULL || tree == NULL || animal == NULL) {
-    return false;
-  }
   if (strcmp(forest, "*") == 0) {
-    return anyInTree2(node, forest, animal, checkAnimalHelper);
+    return node != NULL
+        && (checkAnimal(node->left, forest, tree, animal)
+            || checkTree(node->children, tree, animal)
+            || checkAnimal(node->right, forest, tree, animal));
   }
   BST *f = getForest(node, forest);
   if (f == NULL) {
@@ -93,6 +90,7 @@ bool checkAnimal(BST *node, char *forest, char *tree, char *animal) {
 }
 
 void printForests(BST *node) {
+//  printf("%s", node->value);
   printTree(node);
 }
 
@@ -106,6 +104,8 @@ void printTrees(BST *node, char *forest) {
 
 void printAnimals(BST *node, char *forest, char *tree) {
   BST *tr = getTree(node, forest, tree);
+
+//  printf("\t%d %s %s",tr==NULL, forest,tree);
   if (tr == NULL) {
     return;
   }

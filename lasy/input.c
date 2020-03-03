@@ -6,8 +6,8 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 short readString(char **in, char **s) {
-  char *res = malloc(sizeof(char));
   int size = 1;
   int n = 0;
   while (**in != '\0') {
@@ -15,19 +15,21 @@ short readString(char **in, char **s) {
       if (**in < 33) {
         return -1;
       }
-      res[n] = **in;
+      (*s)[n] = **in;
       n++;
       if (n == size) {
         size *= 2;
-        res = realloc(res, sizeof(char) * size);
+        *s = realloc(*s, sizeof(char) * size);
       }
     } else if (n > 0) {
       break;
     }
     (*in)++;
   }
-//  free(s);
-  *s = realloc(res, sizeof(char) * n);
-//  free(res);
-  return (short)(n > 0);
+  (*s)[n++] = '\0';
+  char *temp = realloc(*s, sizeof(char) * (n));
+  if (temp != NULL) {
+    *s = temp;
+  }
+  return (short) (n > 1);
 }
