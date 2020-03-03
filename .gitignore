@@ -1,4 +1,5 @@
-*.out
+/**/*.o
+/**/out
 sort
 /**/.idea
 /**/cmake-build-debug
