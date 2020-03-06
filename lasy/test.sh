@@ -34,9 +34,9 @@ for f in "$dir"/*.in; do
 
   if [[ $err != 0 ]]; then
     echo -e "\e[1;31m\tWyciek pamięci\e[0m"
+        ((leaked++))
   else
     echo -e "\e[1;32m\tBrak wycieku pamięci\e[0m"
-    ((not_leaked++))
   fi
 
   echo ""

@@ -13,4 +13,8 @@
 //         1 jeśli wczytanie przbiegło pomyślnie
 short readString(char **in, char **s);
 
+short readExtra(char *in);
+
+short readCommand(char **in, char **s);
+
 #endif //LASY__INPUT_H_
