@@ -1,11 +1,29 @@
 #!/bin/bash
+if [[ $# != 2 ]]; then
+  echo "Sposób uzytkowania: $0 <nazwa_programu> <ścieżka/do/folderu/z/testami>." >&2
+  exit 1
+fi
 name=$1
 dir=$2
+
+if ! [[ -d $dir ]]; then
+  echo "Podany folder z testami nie istnieje"
+  exit 1
+fi
+
+if ! (command -v "./$name"); then
+  echo "Podany program nie istnieje"
+  exit 1
+fi
 
 total=0
 correct=0
 leaked=0
-function setval { printf -v "$1" "%s" "$(cat)"; declare -p "$1"; }
+
+function setval() {
+  printf -v "$1" "%s" "$(cat)"
+  declare -p "$1"
+}
 
 for f in "$dir"/*.in; do
   echo -e "\e[1mTest $f \e[0m"
@@ -13,7 +31,6 @@ for f in "$dir"/*.in; do
   sto=$(./"$name" <"$f" 2>/dev/null)
   ste=$(./"$name" <"$f" 2>&1 1>/dev/null)
   err=$?
-
 
   if [[ $err != 0 ]]; then
     echo -e "\e[1;31m\tProgram zakończył się kodem $err\e[0m"
@@ -34,7 +51,7 @@ for f in "$dir"/*.in; do
 
   if [[ $err != 0 ]]; then
     echo -e "\e[1;31m\tWyciek pamięci\e[0m"
-        ((leaked++))
+    ((leaked++))
   else
     echo -e "\e[1;32m\tBrak wycieku pamięci\e[0m"
   fi

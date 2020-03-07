@@ -2,44 +2,62 @@
 // Created by badochov on 02.03.2020.
 //
 
-#include "input.h"
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-short readExtra(char *in) {
-  char *it = in;
-  while (*it != '\0') {
-    if (!isspace(*it)) {
-      if (*it < 33) {
+#include "input.h"
+
+short readExtra() {
+  char c = getc(stdin);
+  while (c != '\n') {
+    if (c == EOF && feof(stdin)) {
+      return 2;
+    }
+    if (!isspace(c)) {
+      if (c < 33) {
         return -1;
       }
       return 1;
     }
-    it++;
+    c = getc(stdin);
   }
   return 0;
 }
 
-short readCommand(char **in, char **s) {
-  if (**in == '#') {
+short readCommand(char **s) {
+  char c = getc(stdin);
+  if (c == '#') {
+    *s = malloc(sizeof(char));
     **s = '#';
     return 0;
   }
-  return readString(in, s);
+  if (c == EOF && feof(stdin)) {
+    return 2;
+  }
+  ungetc(c, stdin);
+  return readString(s);
 }
 
-short readString(char **in, char **s) {
-  int size = 1;
+short readString(char **s) {
+  int size = 0;
   int n = 0;
   char *temp;
-  while (**in != '\0') {
-    if (!isspace(**in)) {
-      if (**in < 33) {
+  char c = getc(stdin);
+  while (c != '\n') {
+    if (c == EOF && feof(stdin)) {
+      return 2;
+    }
+    if (!isspace(c)) {
+      if (c < 33) {
         return -1;
       }
-      (*s)[n] = **in;
+      if (n == 0) {
+        *s = malloc(sizeof(char));
+        size = 1;
+      }
+      (*s)[n] = c;
       n++;
       if (n == size) {
         size *= 2;
@@ -52,7 +70,7 @@ short readString(char **in, char **s) {
     } else if (n > 0) {
       break;
     }
-    (*in)++;
+    c = getc(stdin);
   }
   (*s)[n++] = '\0';
   temp = realloc(*s, sizeof(char) * (n));
@@ -61,7 +79,19 @@ short readString(char **in, char **s) {
   }
   *s = temp;
 
+  if (c == '\n') {
+    return 3;
+  }
   return (short) (n > 1);
+}
+
+bool reachEOL() {
+  while (getc(stdin) != '\n') {
+    if (feof(stdin)) {
+      return false;
+    }
+  }
+  return true;
 }
 
 

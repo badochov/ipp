@@ -11,10 +11,12 @@
 // zwraca -1 jeśli napotkał na nie whitespace o kodzie ascii mniejszy niż -1
 //         0 jeśli nie na nic do wczytania
 //         1 jeśli wczytanie przbiegło pomyślnie
-short readString(char **in, char **s);
+short readString(char **s);
 
-short readExtra(char *in);
+short readExtra();
 
-short readCommand(char **in, char **s);
+short readCommand(char **s);
+
+bool reachEOL();
 
 #endif //LASY__INPUT_H_

@@ -1,4 +1,3 @@
-#define  _GNU_SOURCE
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
@@ -22,8 +21,6 @@ bool validateString(char *s) {
 }
 
 int main() {
-  char *buffer = NULL;
-  char *h = NULL;
   char **args = malloc(sizeof(char *) * 4);
   if (args == NULL) {
     exit(1);
@@ -34,42 +31,57 @@ int main() {
       exit(1);
     }
   }
-  size_t len;
   unsigned short count;
   short readOutcome;
   BST *world = NULL;
   bool validationStatus;
   bool checkOutcome;
-  while (getline(&buffer, &len, stdin) != -1) {
+  while (true) {
     for (int i = 0; i < 4; i++) {
-      char *temp = realloc(args[i], sizeof(char));
-      if (temp == NULL) {
-        exit(1);
-      }
-      args[i] = temp;
+      free(args[i]);
+      args[i] = NULL;
     }
     count = 0;
     readOutcome = 0;
-    h = buffer;
-
     for (int i = 0; i < 5; i++) {
       if (i == 0) {
-        readOutcome = readCommand(&h, &args[i]);
+        readOutcome = readCommand(&args[i]);
       } else if (i == 4) {
-        readOutcome = readExtra(h);
+        readOutcome = readExtra();
       } else {
-        readOutcome = readString(&h, &args[i]);
+        readOutcome = readString(&args[i]);
       }
 
-      if (readOutcome == -1 || readOutcome == 0) {
+      if (readOutcome == -1 || readOutcome == 0 || readOutcome == 2) {
         break;
       }
       count++;
+      if (readOutcome == 3) {
+        break;
+      }
     }
+
+    if (readOutcome == 2) {
+      if (args[0] != NULL) {
+        logError();
+      }
+      break;
+    }
+
+    if (readOutcome != 3) {
+      if (!reachEOL()) {
+        if (!(readOutcome == 0 && count == 0)) {
+          logError();
+        }
+        break;
+      }
+    }
+
     if (readOutcome == -1 || count == 5) {
       logError();
       continue;
     }
+
     if (count == 0) {
       continue;
     }
@@ -147,7 +159,6 @@ int main() {
     }
   }
   deleteTree(&world);
-  free(buffer);
   for (int i = 0; i < 4; i++) {
     free(args[i]);
   }

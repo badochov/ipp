@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
 #include "BST.h"
 //
 // Created by badochov on 01.03.2020.
