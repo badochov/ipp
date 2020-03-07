@@ -22,6 +22,13 @@ typedef struct {
 } Line;
 
 /**
+ * Inicjalizuje nową linie o podanej liczbie arguemntów
+ * @param argsCount liczba argumentów
+ * @return linia
+ */
+Line *initLine(size_t argsCount);
+
+/**
  * Wczytuje linie z pliku
  * @param f plik z którego linia będzie wczytana
  * @param argsSize maksymalna liczba arguemntów

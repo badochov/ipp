@@ -17,6 +17,12 @@ typedef struct {
 } Validator;
 
 /**
+ * Inicjalizuje walidator ze wszystkimi atrybutami ustawionymi na false;
+ * @return walidator
+ */
+Validator *initValidator();
+
+/**
  * Waliduje linie
  * @param line linia która będzie walidowana
  * @return obiekt Validatora

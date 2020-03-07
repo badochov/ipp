@@ -5,9 +5,10 @@
 #include <string.h>
 
 #include "validator.h"
+#include "util.h"
 
 Validator *initValidator() {
-  Validator *v = malloc(sizeof(Validator));
+  Validator *v = alloc(sizeof(Validator));
   if (v == NULL) {
     exit(1);
   }

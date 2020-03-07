@@ -4,17 +4,67 @@
 
 #include <ctype.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 
 #include "input.h"
+#include "util.h"
 
+#define CHECK_EOF(c, f) if (c == EOF && feof(f)) { return 2; }
+
+
+/**
+ * Wczytuje stringa (ASCII 33-255) ignorujać białe znaki go pporzedzajace
+ * @param s referencja do miejsca w którym string ma być zapisany
+ * @param f plik z którego string ma być czytany
+ * @return -1 -> nielegealny znak zostal wczytany
+ *          0 -> nie ma nic do wczytania
+ *          1 -> wczytanie przebiegło pomyślnie
+ *          2 -> koniec pliku został osiagniety
+ */
+short readString(char **s, FILE *f) {
+  int size = 0;
+  int n = 0;
+  char c = getc(f);
+  while (c != '\n') {
+    CHECK_EOF(c, f);
+    if (!isspace(c)) {
+      if (c < 33) {
+        return -1;
+      }
+      if (n == 0) {
+        *s = alloc(sizeof(char));
+        size = 1;
+      }
+      (*s)[n++] = c;
+      if (n == size) {
+        size *= 2;
+        *s = resize(*s, size);
+      }
+    } else if (n > 0) {
+      break;
+    }
+    c = getc(f);
+  }
+  if (size) {
+    (*s)[n++] = '\0';
+    *s = resize(*s, n);
+  }
+
+  if (c == '\n') {
+    ungetc(c, f);
+  }
+  return (short) (n > 1);
+}
+
+/**
+ * SPrawdza czy są argumenty dodatkowe do komendy
+ * @param f plik z ktorego argumenty mają być czytane
+ * @return kody jak w readString
+ */
 short readExtra(FILE *f) {
   char c = getc(f);
   while (c != '\n') {
-    if (c == EOF && feof(f)) {
-      return 2;
-    }
+    CHECK_EOF(c, f);
     if (!isspace(c)) {
       if (c < 33) {
         return -1;
@@ -27,73 +77,30 @@ short readExtra(FILE *f) {
   return 0;
 }
 
-short readString(char **s, FILE *f) {
-  int size = 0;
-  int n = 0;
-  char *temp;
-  char c = getc(f);
-  while (c != '\n') {
-    if (c == EOF && feof(f)) {
-      return 2;
-    }
-    if (!isspace(c)) {
-      if (c < 33) {
-        return -1;
-      }
-      if (n == 0) {
-        *s = malloc(sizeof(char));
-        if (*s == NULL) {
-          exit(1);
-        }
-        size = 1;
-      }
-      (*s)[n++] = c;
-      if (n == size) {
-        size *= 2;
-        temp = realloc(*s, sizeof(char) * size);
-        if (temp == NULL) {
-          exit(1);
-        }
-        *s = temp;
-      }
-    } else if (n > 0) {
-      break;
-    }
-    c = getc(f);
-  }
-  if (size) {
-    (*s)[n++] = '\0';
-    temp = realloc(*s, sizeof(char) * (n));
-    if (temp == NULL) {
-      exit(1);
-    }
-    *s = temp;
-  }
-
-  if (c == '\n') {
-    ungetc(c, f);
-  }
-  return (short) (n > 1);
-}
-
+/**
+ * Wczyuję komende lub komentarz
+ * @param s referencja do zmiennej w której ma być zapisana komenda
+ * @param f plik z którego czyta komenda
+ * @return 0 -> komentarz oraz takie same kody jak readString
+ */
 short readCommand(char **s, FILE *f) {
   char c = getc(f);
   if (c == '#') {
-    *s = malloc(sizeof(char)*2);
-    if (*s == NULL) {
-      exit(1);
-    }
+    *s = alloc(sizeof(char) * 2);
     (*s)[0] = '#';
     (*s)[1] = '\0';
     return 0;
   }
-  if (c == EOF && feof(f)) {
-    return 2;
-  }
+  CHECK_EOF(c, f);
   ungetc(c, f);
   return readString(s, f);
 }
 
+/**
+ * Dochodzi do końca linii
+ * @param f plik
+ * @return jeżeli plik zakończył się przed kończem lini false true wpp
+ */
 bool reachEOL(FILE *f) {
   while (getc(f) != '\n') {
     if (feof(f)) {
@@ -104,11 +111,9 @@ bool reachEOL(FILE *f) {
 }
 
 Line *initLine(size_t argsCount) {
-  Line *l = malloc(sizeof(Line));
-  if (l == NULL) {
-    exit(1);
-  }
-  l->args = malloc(sizeof(char *) * argsCount);
+  Line *l;
+  l = alloc(sizeof(Line));
+  l->args = alloc(sizeof(char *) * argsCount);
   for (size_t i = 0; i < argsCount; i++) {
     l->args[i] = NULL;
   }

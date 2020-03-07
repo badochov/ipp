@@ -7,18 +7,13 @@
 #include <string.h>
 
 #include "BST.h"
+#include "util.h"
 
 #define IS_NODE_NULL(n) if(n == NULL){return NULL;}
 
 BST init(char *value) {
-  BST node = malloc(sizeof(struct Node));
-  if (node == NULL) {
-    exit(1);
-  }
-  node->key = malloc(sizeof(char) * (strlen(value) + 1));
-  if (node->key == NULL) {
-    exit(1);
-  }
+  BST node = alloc(sizeof(struct Node));
+  node->key = alloc(sizeof(char) * (strlen(value) + 1));
   strcpy(node->key, value);
   node->right = NULL;
   node->left = NULL;
