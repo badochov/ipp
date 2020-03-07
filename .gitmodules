@@ -1,0 +1,3 @@
+[submodule "lasy/tests"]
+	path = lasy/tests
+	url = git@github.com:jmolinski/ipp-2020-testy.git

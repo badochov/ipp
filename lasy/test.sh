@@ -8,7 +8,8 @@ function checkTempFileError(){
 }
 
 function createTempFile(){
-  local temp=$(mktemp)
+  local temp
+  temp=$(mktemp)
   checkTempFileError $?
   echo "$temp"
 }
@@ -17,6 +18,7 @@ if [[ $# != 2 ]]; then
   echo "Sposób uzytkowania: $0 <nazwa_programu> <ścieżka/do/folderu/z/testami>." >&2
   exit 1
 fi
+
 name=$1
 dir=$2
 
@@ -35,9 +37,7 @@ correct=0
 leaked=0
 
 err_file=$(createTempFile)
-checkTempFileError $?
 out_file=$(createTempFile)
-checkTempFileError $?
 
 shopt -s nullglob
 for f in "$dir"/*.in; do
