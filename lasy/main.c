@@ -1,4 +1,3 @@
-#define  _GNU_SOURCE
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
@@ -22,60 +21,81 @@ bool validateString(char *s) {
 }
 
 int main() {
-  char *buffer = NULL;
-  char *h = NULL;
-  char **args = malloc(sizeof(char *) * 5);
-  for (int i = 0; i < 5; i++) {
-    args[i] = malloc(sizeof(char));
+  char **args = malloc(sizeof(char *) * 4);
+  if (args == NULL) {
+    exit(1);
   }
-  size_t len;
+  for (int i = 0; i < 4; i++) {
+    args[i] = malloc(sizeof(char));
+    if (args[i] == NULL) {
+      exit(1);
+    }
+  }
   unsigned short count;
   short readOutcome;
   BST *world = NULL;
   bool validationStatus;
   bool checkOutcome;
-  while (getline(&buffer, &len, stdin) != -1) {
-    for (int i = 0; i < 5; i++) {
-      char *temp = realloc(args[i], sizeof(char));
-      if (temp) {
-        args[i] = temp;
-      }
+  while (true) {
+    for (int i = 0; i < 4; i++) {
+      free(args[i]);
+      args[i] = NULL;
     }
     count = 0;
     readOutcome = 0;
-    h = buffer;
     for (int i = 0; i < 5; i++) {
-      readOutcome = readString(&h, &args[i]);
-//      printf("%s ", args[i]);
-      if (readOutcome == -1 || readOutcome == 0) {
+      if (i == 0) {
+        readOutcome = readCommand(&args[i]);
+      } else if (i == 4) {
+        readOutcome = readExtra();
+      } else {
+        readOutcome = readString(&args[i]);
+      }
+
+      if (readOutcome == -1 || readOutcome == 0 || readOutcome == 2) {
         break;
       }
-      if (i == 0) {
-        if (args[0][0] == '#') {
-          break;
-        }
-      }
       count++;
+      if (readOutcome == 3) {
+        break;
+      }
     }
-    if (readOutcome == -1) {
+
+    if (readOutcome == 2) {
+      if (args[0] != NULL) {
+        logError();
+      }
+      break;
+    }
+
+    if (readOutcome != 3) {
+      if (!reachEOL()) {
+        if (!(readOutcome == 0 && count == 0)) {
+          logError();
+        }
+        break;
+      }
+    }
+
+    if (readOutcome == -1 || count == 5) {
       logError();
       continue;
     }
-    if (count == 0 || args[0][0] == '#') {
+
+    if (count == 0) {
       continue;
     }
-    validationStatus = count == 1;
-    if (count == 5) {
-      logError();
-      continue;
-    }
-    for (int i = 1; i < count; i++) {
+    validationStatus = false;
+
+    for (int i = 0; i < count; i++) {
       validationStatus = validationStatus || validateString(args[i]);
     }
+
     if (!validationStatus) {
       logError();
       continue;
     }
+
     if (strcmp(args[0], "ADD") == 0) {
       switch (count) {
         case 2: addForest(&world, args[1]);
@@ -139,9 +159,7 @@ int main() {
     }
   }
   deleteTree(&world);
-//  free(h);
-  free(buffer);
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < 4; i++) {
     free(args[i]);
   }
   free(args);

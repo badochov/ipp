@@ -4,7 +4,7 @@
 
 #include <stddef.h>
 #include <string.h>
-#include <stdio.h>
+
 #include "forests.h"
 
 // szuka lasu o danej nazwie, jeżeli go nie ma zwraca NULL

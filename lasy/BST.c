@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
 #include "BST.h"
 //
 // Created by badochov on 01.03.2020.
@@ -9,7 +10,13 @@
 
 BST *init(char *value) {
   BST *node = malloc(sizeof(BST));
+  if (node == NULL) {
+    exit(1);
+  }
   node->value = malloc(sizeof(char) * (strlen(value) + 1));
+  if (node->value == NULL) {
+    exit(1);
+  }
   strcpy(node->value, value);
   node->right = NULL;
   node->left = NULL;
