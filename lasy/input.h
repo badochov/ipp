@@ -6,17 +6,33 @@
 #define LASY__INPUT_H_
 
 #include <stdbool.h>
+#include <stdio.h>
 
-// wczytuje string z in do s
-// zwraca -1 jeśli napotkał na nie whitespace o kodzie ascii mniejszy niż -1
-//         0 jeśli nie na nic do wczytania
-//         1 jeśli wczytanie przbiegło pomyślnie
-short readString(char **s);
+typedef struct {
+  /** Czy EOF został osiągniety */
+  bool eof;
+  /** Czy byly jakiś nielegalne znaki (ASCII < 33) */
+  bool ill;
+  /** Wczytane argumenty */
+  char **args;
+  /** Liczba wczytanyvh argumentów*/
+  size_t size;
+  /** Maksymalna liczba argumentów do wczytania */
+  size_t maxSize;
+} Line;
 
-short readExtra();
+/**
+ * Wczytuje linie z pliku
+ * @param f plik z którego linia będzie wczytana
+ * @param argsSize maksymalna liczba arguemntów
+ * @return struktura odpowiedzi
+ */
+Line *readLine(FILE *f, size_t argsSize);
 
-short readCommand(char **s);
-
-bool reachEOL();
+/**
+ * Zwalnia pamięć zajmowaną przez linię
+ * @param line linia
+ */
+void freeLine(Line *line);
 
 #endif //LASY__INPUT_H_

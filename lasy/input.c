@@ -9,10 +9,10 @@
 
 #include "input.h"
 
-short readExtra() {
-  char c = getc(stdin);
+short readExtra(FILE *f) {
+  char c = getc(f);
   while (c != '\n') {
-    if (c == EOF && feof(stdin)) {
+    if (c == EOF && feof(f)) {
       return 2;
     }
     if (!isspace(c)) {
@@ -21,32 +21,19 @@ short readExtra() {
       }
       return 1;
     }
-    c = getc(stdin);
+    c = getc(f);
   }
+  ungetc(c, f);
   return 0;
 }
 
-short readCommand(char **s) {
-  char c = getc(stdin);
-  if (c == '#') {
-    *s = malloc(sizeof(char));
-    **s = '#';
-    return 0;
-  }
-  if (c == EOF && feof(stdin)) {
-    return 2;
-  }
-  ungetc(c, stdin);
-  return readString(s);
-}
-
-short readString(char **s) {
+short readString(char **s, FILE *f) {
   int size = 0;
   int n = 0;
   char *temp;
-  char c = getc(stdin);
+  char c = getc(f);
   while (c != '\n') {
-    if (c == EOF && feof(stdin)) {
+    if (c == EOF && feof(f)) {
       return 2;
     }
     if (!isspace(c)) {
@@ -55,10 +42,12 @@ short readString(char **s) {
       }
       if (n == 0) {
         *s = malloc(sizeof(char));
+        if (*s == NULL) {
+          exit(1);
+        }
         size = 1;
       }
-      (*s)[n] = c;
-      n++;
+      (*s)[n++] = c;
       if (n == size) {
         size *= 2;
         temp = realloc(*s, sizeof(char) * size);
@@ -70,28 +59,100 @@ short readString(char **s) {
     } else if (n > 0) {
       break;
     }
-    c = getc(stdin);
+    c = getc(f);
   }
-  (*s)[n++] = '\0';
-  temp = realloc(*s, sizeof(char) * (n));
-  if (temp == NULL) {
-    exit(1);
+  if (size) {
+    (*s)[n++] = '\0';
+    temp = realloc(*s, sizeof(char) * (n));
+    if (temp == NULL) {
+      exit(1);
+    }
+    *s = temp;
   }
-  *s = temp;
 
   if (c == '\n') {
-    return 3;
+    ungetc(c, f);
   }
   return (short) (n > 1);
 }
 
-bool reachEOL() {
-  while (getc(stdin) != '\n') {
-    if (feof(stdin)) {
+short readCommand(char **s, FILE *f) {
+  char c = getc(f);
+  if (c == '#') {
+    *s = malloc(sizeof(char)*2);
+    if (*s == NULL) {
+      exit(1);
+    }
+    (*s)[0] = '#';
+    (*s)[1] = '\0';
+    return 0;
+  }
+  if (c == EOF && feof(f)) {
+    return 2;
+  }
+  ungetc(c, f);
+  return readString(s, f);
+}
+
+bool reachEOL(FILE *f) {
+  while (getc(f) != '\n') {
+    if (feof(f)) {
       return false;
     }
   }
   return true;
 }
 
+Line *initLine(size_t argsCount) {
+  Line *l = malloc(sizeof(Line));
+  if (l == NULL) {
+    exit(1);
+  }
+  l->args = malloc(sizeof(char *) * argsCount);
+  for (size_t i = 0; i < argsCount; i++) {
+    l->args[i] = NULL;
+  }
+  l->size = 0;
+  l->maxSize = argsCount;
+  l->eof = l->ill = false;
+  return l;
+}
 
+Line *readLine(FILE *f, size_t argsCount) {
+  Line *res = initLine(argsCount);
+  short readOutcome = 0;
+  for (size_t i = 0; i < argsCount + 1; i++) {
+    if (i == 0) {
+      readOutcome = readCommand(&res->args[i], f);
+    } else if (i == argsCount) {
+      readOutcome = readExtra(f);
+    } else {
+      readOutcome = readString(&res->args[i], f);
+    }
+    if (readOutcome == -1 || readOutcome == 0 || readOutcome == 2) {
+      break;
+    }
+    res->size++;
+  }
+  if (readOutcome == -1) {
+    res->ill = true;
+  }
+  if (readOutcome == 2) {
+    res->eof = true;
+  } else {
+    res->eof = !reachEOL(f);
+  }
+
+  return res;
+}
+
+void freeLine(Line *line) {
+  if (line == NULL) {
+    return;
+  }
+  for (size_t i = 0; i < line->maxSize; i++) {
+    free(line->args[i]);
+  }
+  free(line->args);
+  free(line);
+}
