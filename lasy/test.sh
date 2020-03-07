@@ -41,6 +41,7 @@ out_file=$(createTempFile)
 
 shopt -s nullglob
 for f in "$dir"/*.in; do
+  ((total++))
   echo -e "\e[1mTest $f \e[0m"
 
   ./"$name" <"$f" 2>"$err_file" >"$out_file"
@@ -48,6 +49,7 @@ for f in "$dir"/*.in; do
 
   if [[ $err != 0 ]]; then
     echo -e "\e[1;31m\tProgram zakończył się kodem $err\e[0m"
+    continue
   fi
 
   d_out=$(diff "${f%in}"out "$out_file")
@@ -58,7 +60,6 @@ for f in "$dir"/*.in; do
     echo -e "\e[1;32m\tPoprawny wynik testu\e[0m"
     ((correct++))
   fi
-  ((total++))
 
   valgrind --leak-check=full --error-exitcode=1 ./"$name" command <"$f" >/dev/null 2>&1
   err=$?

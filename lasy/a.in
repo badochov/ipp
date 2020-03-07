@@ -1,10 +1,10 @@
-ADD
-
-
-		e#45Q%O+rT
-
-
-		+M+r`Os'Nq
-
-
-		oQli3':
+ADD A
+ADD A A
+ADD A A B
+CHECK A A B
+CHECK * A B
+CHECK A * B
+CHECK * * B
+CHECK * B
+CHECK * * B
+CHECK * * A

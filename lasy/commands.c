@@ -75,9 +75,9 @@ bool check(BST node, char **keys, size_t keysSize) {
   }
   if (keysSize > 1) {
     if (strcmp(keys[0], "*") == 0) {
-      return (node->left && check(node->left->children, keys + 1, keysSize - 1))
+      return check(node->left, keys, keysSize)
           || check(node->children, keys + 1, keysSize - 1)
-          || (node->right && check(node->right->children, keys + 1, keysSize - 1));
+          || check(node->right, keys, keysSize);
     } else {
       BST n = getNode(node, keys[0]);
       if (n == NULL || n->children == NULL) {
