@@ -10,7 +10,11 @@
 #include "util.h"
 
 #define CHECK_EOF(c, f) if (c == EOF && feof(f)) { return 2; }
+#define CHECK_CHAR_VALIDITY(c) if(!isValid(c)) { return -1; }
 
+bool isValid(const char c){
+    return (unsigned char) c > 32;
+}
 
 /**
  * Wczytuje stringa (ASCII 33-255) ignorujać białe znaki go pporzedzajace
@@ -28,9 +32,7 @@ short readString(char **s, FILE *f) {
   while (c != '\n') {
     CHECK_EOF(c, f);
     if (!isspace(c)) {
-      if (c < 33) {
-        return -1;
-      }
+      CHECK_CHAR_VALIDITY(c);
       if (n == 0) {
         *s = alloc(sizeof(char));
         size = 1;
@@ -49,7 +51,6 @@ short readString(char **s, FILE *f) {
     (*s)[n++] = '\0';
     *s = resize(*s, n);
   }
-
   if (c == '\n') {
     ungetc(c, f);
   }
@@ -66,10 +67,8 @@ short readExtra(FILE *f) {
   while (c != '\n') {
     CHECK_EOF(c, f);
     if (!isspace(c)) {
-      if (c < 33) {
-        return -1;
-      }
-      return 1;
+        CHECK_CHAR_VALIDITY(c);
+        return 1;
     }
     c = getc(f);
   }
@@ -86,9 +85,6 @@ short readExtra(FILE *f) {
 short readCommand(char **s, FILE *f) {
   char c = getc(f);
   if (c == '#') {
-    *s = alloc(sizeof(char) * 2);
-    (*s)[0] = '#';
-    (*s)[1] = '\0';
     return 0;
   }
   CHECK_EOF(c, f);

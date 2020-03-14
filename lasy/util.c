@@ -13,6 +13,7 @@ void *resize(void *arr, size_t len) {
   }
   return temp;
 }
+
 void *alloc(size_t size) {
   void *temp = malloc(size);
   if (temp == NULL) {

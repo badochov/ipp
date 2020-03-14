@@ -27,6 +27,6 @@ int main() {
     }
   }
   //  free memory
-  world = deleteTree(world);
+  deleteTree(world);
   return 0;
 }
