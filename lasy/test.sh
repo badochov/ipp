@@ -44,14 +44,9 @@ for f in "$dir"/*.in; do
   ((total++))
   echo -e "\e[1mTest $f \e[0m"
 
-  ./"$name" <"$f" 2>"$err_file" >"$out_file"
+  valgrind --error-exitcode=15 --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=all --log-file=/dev/null ./"$name" <"$f" >"$out_file" 2>"$err_file"
+
   err=$?
-
-  if [[ $err != 0 ]]; then
-    echo -e "\e[1;31m\tProgram zakończył się kodem $err\e[0m"
-    continue
-  fi
-
   d_out=$(diff "${f%in}"out "$out_file")
   d_err=$(diff "${f%in}"err "$err_file")
   if [[ $d_out != "" ]] || [[ $d_err != "" ]]; then
@@ -61,10 +56,8 @@ for f in "$dir"/*.in; do
     ((correct++))
   fi
 
-  valgrind --leak-check=full --error-exitcode=1 ./"$name" command <"$f" >/dev/null 2>&1
-  err=$?
 
-  if [[ $err != 0 ]]; then
+  if [[ $err == 15 ]]; then
     echo -e "\e[1;31m\tWyciek pamięci\e[0m"
     ((leaked++))
   else

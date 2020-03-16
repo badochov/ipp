@@ -1,3 +1,6 @@
 [submodule "lasy/tests"]
 	path = lasy/tests
 	url = git@github.com:jmolinski/ipp-2020-testy.git
+[submodule "lasy/tests_ciebiera"]
+	path = lasy/tests_ciebiera
+	url = git@github.com:ciebson123/Testy_maly_projekt_IPP.git
