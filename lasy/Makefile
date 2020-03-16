@@ -10,4 +10,7 @@ all: $(OBJ)
 	$(CC) -o forests $^ $(CFLAGS)
 
 clean:
-	rm -f *.o forests
+	rm -f ./*.o forests
+
+zip:
+	find .  -maxdepth 1 -name "*.[ch]" | zip male_zadanie_Hubert_Badocha Makefile test.sh -@
