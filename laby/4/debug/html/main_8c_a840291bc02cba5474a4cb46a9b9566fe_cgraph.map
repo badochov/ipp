@@ -1,0 +1,6 @@
+<map id="main" name="main">
+<area shape="rect" id="node1" title="Generuje zadaną ilość liczb pseudolosowych." alt="" coords="5,56,56,83"/>
+<area shape="rect" id="node2" href="$generator_8h.html#ac1ef6755705054aafb447a33520e8177" title="Generuje liczbę pseudolosową." alt="" coords="104,5,248,32"/>
+<area shape="rect" id="node3" href="$input-output_8h.html#a421aa62ae3c8cb551cbd104187ea097c" title="Wypisuje liczbę." alt="" coords="141,56,211,83"/>
+<area shape="rect" id="node4" href="$input-output_8h.html#a73e08ab273797f2530baa5dc42346939" title="Czyta liczbę." alt="" coords="145,107,207,133"/>
+</map>

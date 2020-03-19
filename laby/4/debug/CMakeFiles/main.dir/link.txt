@@ -1,0 +1,1 @@
+/usr/bin/cc -std=c11 -Wall -Wextra -g  -rdynamic CMakeFiles/main.dir/src/generator.c.o CMakeFiles/main.dir/src/input-output.c.o CMakeFiles/main.dir/src/main.c.o  -o main 

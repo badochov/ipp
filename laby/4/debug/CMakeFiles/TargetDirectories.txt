@@ -1,0 +1,4 @@
+/home/badochov/Desktop/IPP/laby/4/debug/CMakeFiles/edit_cache.dir
+/home/badochov/Desktop/IPP/laby/4/debug/CMakeFiles/main.dir
+/home/badochov/Desktop/IPP/laby/4/debug/CMakeFiles/rebuild_cache.dir
+/home/badochov/Desktop/IPP/laby/4/debug/CMakeFiles/doc.dir

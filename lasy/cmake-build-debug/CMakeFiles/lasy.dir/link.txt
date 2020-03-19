@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/lasy.dir/main.c.o CMakeFiles/lasy.dir/BST.c.o CMakeFiles/lasy.dir/commands.c.o CMakeFiles/lasy.dir/input.c.o CMakeFiles/lasy.dir/validator.c.o CMakeFiles/lasy.dir/util.c.o  -o lasy 
