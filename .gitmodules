@@ -4,3 +4,6 @@
 [submodule "lasy/tests_ciebiera"]
 	path = lasy/tests_ciebiera
 	url = git@github.com:ciebson123/Testy_maly_projekt_IPP.git
+[submodule "lasy/tests_random"]
+	path = lasy/tests_random
+	url = git@github.com:flail1123/IPP_random_tests.git

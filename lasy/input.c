@@ -12,8 +12,8 @@
 #define CHECK_EOF(c, f) if (c == EOF && feof(f)) { return 2; }
 #define CHECK_CHAR_VALIDITY(c) if(!isValid(c)) { return -1; }
 
-bool isValid(const char c){
-    return (unsigned char) c > 32;
+bool isValid(const char c) {
+  return (unsigned char) c > 32;
 }
 
 /**
@@ -28,7 +28,7 @@ bool isValid(const char c){
 short readString(char **s, FILE *f) {
   int size = 0;
   int n = 0;
-  char c = getc(f);
+  char c = (char) getc(f);
   while (c != '\n') {
     CHECK_EOF(c, f);
     if (!isspace(c)) {
@@ -45,7 +45,7 @@ short readString(char **s, FILE *f) {
     } else if (n > 0) {
       break;
     }
-    c = getc(f);
+    c = (char) getc(f);
   }
   if (size) {
     (*s)[n++] = '\0';
@@ -63,14 +63,14 @@ short readString(char **s, FILE *f) {
  * @return kody jak w readString
  */
 short readExtra(FILE *f) {
-  char c = getc(f);
+  char c = (char) getc(f);
   while (c != '\n') {
     CHECK_EOF(c, f);
     if (!isspace(c)) {
-        CHECK_CHAR_VALIDITY(c);
-        return 1;
+      CHECK_CHAR_VALIDITY(c);
+      return 1;
     }
-    c = getc(f);
+    c = (char) getc(f);
   }
   ungetc(c, f);
   return 0;
@@ -83,7 +83,7 @@ short readExtra(FILE *f) {
  * @return 0 -> komentarz oraz takie same kody jak readString
  */
 short readCommand(char **s, FILE *f) {
-  char c = getc(f);
+  char c = (char) getc(f);
   if (c == '#') {
     return 0;
   }
