@@ -27,7 +27,7 @@ if ! [[ -d $dir ]]; then
   exit 1
 fi
 
-if ! (command -v "./$name"); then
+if ! (command -v "$name"); then
   echo "Podany program nie istnieje"
   exit 1
 fi
@@ -44,7 +44,7 @@ for f in "$dir"/*.in; do
   ((total++))
   echo -e "\e[1mTest $f \e[0m"
 
-  valgrind --error-exitcode=15 --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=all --log-file=/dev/null ./"$name" <"$f" >"$out_file" 2>"$err_file"
+  valgrind --error-exitcode=15 --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=all --log-file=/dev/null "$name" <"$f" >"$out_file" 2>"$err_file"
 
   err=$?
   d_out=$(diff "${f%in}"out "$out_file")
