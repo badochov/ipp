@@ -13,7 +13,6 @@
  */
 void *resize(void *arr, size_t len);
 
-
 /**
  * Alokuje pamieć sprawdzajac czy operacja sie powiodła
  * @param size rozmiar pamięci potrzebny do zaalokowania

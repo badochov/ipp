@@ -1,13 +1,13 @@
 #!/bin/bash
 
-function checkTempFileError(){
+function checkTempFileError() {
   if [[ $1 != 0 ]]; then
     echo "Nie powiodło się stworzenie pliku tymczasowego"
     exit 1
   fi
 }
 
-function createTempFile(){
+function createTempFile() {
   local temp
   temp=$(mktemp)
   checkTempFileError $?
@@ -55,7 +55,6 @@ for f in "$dir"/*.in; do
     echo -e "\e[1;32m\tPoprawny wynik testu\e[0m"
     ((correct++))
   fi
-
 
   if [[ $err == 15 ]]; then
     echo -e "\e[1;31m\tWyciek pamięci\e[0m"

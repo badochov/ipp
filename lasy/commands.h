@@ -36,7 +36,6 @@ BST add(BST node, char **keys, size_t keysSize);
  */
 BST del(BST node, char **keys, size_t keysSize);
 
-
 /**
  * Funkcja sprawdzający czy wezeł o danym kluczu istenieje w drzewie na danym zagłebienieniiu
  *

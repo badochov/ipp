@@ -73,6 +73,6 @@ bool validateCheck(char **args, size_t argCount, size_t maxArgs);
  * Zwalnia pamięć zajmowaną przez Walidator
  * @param v walidator
  */
-void freeValidator(Validator* v);
+void freeValidator(Validator *v);
 
 #endif //LASY__VALIDATOR_H_

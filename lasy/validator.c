@@ -39,7 +39,7 @@ bool validateAdd(size_t argCount, size_t maxArgs) {
   return isAoArgumentsOk(argCount, 1, maxArgs);
 }
 
-bool validateDel( size_t argCount, size_t maxArgs) {
+bool validateDel(size_t argCount, size_t maxArgs) {
   return isAoArgumentsOk(argCount, 0, maxArgs);
 }
 
